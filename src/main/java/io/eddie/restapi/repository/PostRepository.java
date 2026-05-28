@@ -1,5 +1,7 @@
 package io.eddie.restapi.repository;
 
+import io.eddie.restapi.dto.SavePostRequest;
+import io.eddie.restapi.dto.UpdatePostRequest;
 import io.eddie.restapi.entity.Post;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
@@ -34,9 +36,10 @@ public class PostRepository {
         db.remove(id);
     }
 
-    public Post update(Long id) {
+    public Post update(Long id, UpdatePostRequest request) {
 
         Post findPost = db.get(id);
+        findPost.update(request);
 
         return db.replace(findPost.getId(), findPost);
 

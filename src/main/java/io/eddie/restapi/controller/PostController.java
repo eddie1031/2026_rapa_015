@@ -1,5 +1,7 @@
 package io.eddie.restapi.controller;
 
+import io.eddie.restapi.dto.SavePostRequest;
+import io.eddie.restapi.dto.UpdatePostRequest;
 import io.eddie.restapi.entity.Post;
 import io.eddie.restapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,8 +50,9 @@ public class PostController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // 201
     public ResponseEntity<Post> savePost(
+            @RequestBody SavePostRequest request
     ) {
-        Post findPost = repository.save(null);
+        Post findPost = repository.save(Post.of(request));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(findPost);
@@ -60,12 +63,11 @@ public class PostController {
     @PatchMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK) // 200
     public ResponseEntity<Post> updatePost(
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            @RequestBody UpdatePostRequest request
     ) {
-        Post updated = repository.update(postId);
+        Post updated = repository.update(postId, request);
         return ResponseEntity.ok(updated);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(updated);
     }
 
     // 특정 게시물 삭제

@@ -1,6 +1,6 @@
 package io.eddie.restapi.entity;
 
-import lombok.Data;
+import io.eddie.restapi.dto.SavePostRequest;import io.eddie.restapi.dto.UpdatePostRequest;import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +14,26 @@ public class Post {
 
     private String author;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public static Post of(SavePostRequest request) {
+        Post post = new Post();
+
+        post.setTitle(request.title());
+        post.setContents(request.contents());
+        post.setAuthor(request.author());
+
+        return post;
+    }
+
+    public void update(UpdatePostRequest request) {
+
+        this.title = request.title();
+        this.contents = request.contents();
+
+        this.updatedAt = LocalDateTime.now();
+
+    }
 
 }
