@@ -1,5 +1,6 @@
 package io.eddie.restapi.controller;
 
+import io.eddie.restapi.dto.GeneralResponse;
 import io.eddie.restapi.dto.SavePostRequest;
 import io.eddie.restapi.dto.UpdatePostRequest;
 import io.eddie.restapi.entity.Post;
@@ -22,62 +23,75 @@ public class PostController {
     // 다건조회
     @GetMapping
     @ResponseStatus(HttpStatus.OK) // 200
-    public ResponseEntity<List<Object>> getPosts() {
+    public GeneralResponse<List<Object>> getPosts() {
 
         List<Object> objects = List.of();
 
-        return ResponseEntity.ok(
-                objects
-        );
+        return GeneralResponse.<List<Object>>builder()
+                .message("성공적으로 목록을 조회했습니다.")
+                .code("S-100")
+                .data(objects)
+                .build();
 
     }
 
     // 단건조회
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK) // 201
-    public ResponseEntity<Post> getPost(
+    public GeneralResponse<Post> getPost(
             @PathVariable Long postId
     ) {
         Post findPost = repository.findById(postId);
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(findPost);
+        return GeneralResponse.<Post>builder()
+                .message("성공적으로 게시물을 조회했습니다.")
+                .code("S-101")
+                .data(findPost)
+                .build();
 
     }
 
     // 게시물 생성
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // 201
-    public ResponseEntity<Post> savePost(
+    public GeneralResponse<Post> savePost(
             @RequestBody SavePostRequest request
     ) {
         Post findPost = repository.save(Post.of(request));
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(findPost);
+        return GeneralResponse.<Post>builder()
+                .message("성공적으로 게시물을 생성했습니다.")
+                .code("S-102")
+                .data(findPost)
+                .build();
 
     }
 
     // 특정 게시물 수정
     @PatchMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK) // 200
-    public ResponseEntity<Post> updatePost(
+    public GeneralResponse<Post> updatePost(
             @PathVariable Long postId,
             @RequestBody UpdatePostRequest request
     ) {
         Post updated = repository.update(postId, request);
-        return ResponseEntity.ok(updated);
+        return GeneralResponse.<Post>builder()
+                .message("성공적으로 게시물을 수정했습니다.")
+                .code("S-103")
+                .data(updated)
+                .build();
     }
 
     // 특정 게시물 삭제
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT) // 204
-    public ResponseEntity<Void> deletePost(
+    public GeneralResponse<Void> deletePost(
             @PathVariable Long postId
     ) {
         repository.deleteById(postId);
-        return ResponseEntity.noContent().build();
+        return GeneralResponse.<Void>builder()
+                .message("성공적으로 게시물을 삭제했습니다.")
+                .code("S-104")
+                .build();
     }
 
 }
