@@ -6,6 +6,7 @@ import io.eddie.restapi.dto.UpdatePostRequest;
 import io.eddie.restapi.entity.Post;
 import io.eddie.restapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -57,6 +59,7 @@ public class PostController {
     public GeneralResponse<Post> savePost(
             @RequestBody SavePostRequest request
     ) {
+        log.info("Save post request: {}", request);
         Post findPost = repository.save(Post.of(request));
         return GeneralResponse.<Post>builder()
                 .message("성공적으로 게시물을 생성했습니다.")
